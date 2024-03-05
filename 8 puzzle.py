@@ -1,13 +1,11 @@
 from heapq import heappush, heappop
 
-# Function to find the index of a value in the puzzle
 def find_index(puzzle, value):
     for i in range(3):
         for j in range(3):
             if puzzle[i][j] == value:
                 return i, j
 
-# Function to calculate the  distance heuristic
 def manhattan_distance(puzzle):
     distance = 0
     for i in range(3):
@@ -17,7 +15,7 @@ def manhattan_distance(puzzle):
                 distance += abs(x_goal - i) + abs(y_goal - j)
     return distance
 
-# Function to get possible moves
+
 def get_moves(puzzle):
     moves = []
     x, y = find_index(puzzle, 0)
@@ -39,11 +37,11 @@ def get_moves(puzzle):
         moves.append(new_puzzle)
     return moves
 
-# Function to check if a puzzle is the goal state
+
 def is_goal(puzzle):
     return puzzle == [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
 
-# Function to solve the 8-puzzle problem using A* algorithm
+
 def solve(puzzle):
     frontier = [(manhattan_distance(puzzle), 0, puzzle)]
     came_from = {}
