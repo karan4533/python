@@ -1,58 +1,45 @@
-def is_valid(board, row, col, num):
-    # Check if num is already present in the row
-    if num in board[row]:
-        return False
-    
-    # Check if num is already present in the column
-    for i in range(3):
-        if board[i][col] == num:
-            return False
-    
-    # Check if num is already present in the 3x3 subgrid
-    start_row, start_col = 3 * (row // 3), 3 * (col // 3)
-    for i in range(start_row, start_row + 3):
-        for j in range(start_col, start_col + 3):
-            if board[i][j] == num:
-                return False
-    
-    return True
+SIZE = 3
 
-def find_empty_location(board):
-    for i in range(3):
-        for j in range(3):
-            if board[i][j] == 0:
-                return (i, j)
-    return None
+def main():
+    board = [[0 for _ in range(SIZE)] for _ in range(SIZE)]
+    display_possibilities(board, 0, 0)
 
-def solve_sudoku(board):
-    empty_location = find_empty_location(board)
-    if not empty_location:
-        return True
-    
-    row, col = empty_location
-    
-    for num in range(1, 4):
+def display_possibilities(board, row, col):
+    if row == SIZE:
+        display_board(board)
+        return
+
+    for num in range(1, SIZE+1):
         if is_valid(board, row, col, num):
             board[row][col] = num
-            if solve_sudoku(board):
-                return True
-            board[row][col] = 0  # Backtrack if the current configuration doesn't lead to a solution
-    
-    return False
+            next_row = row
+            next_col = col + 1
+            if next_col == SIZE:
+                next_row += 1
+                next_col = 0
+            display_possibilities(board, next_row, next_col)
+            board[row][col] = 0
 
-def print_board(board):
-    for row in board:
-        print(" ".join(map(str, row)))
+def is_valid(board, row, col, num):
+    for i in range(SIZE):
+        if board[row][i] == num or board[i][col] == num:
+            return False
 
-# Example Sudoku puzzle
-puzzle = [
-    [0, 0, 0],
-    [0, 2, 0],
-    [0, 0, 3]
-]
+    start_row = row - row % (SIZE // 3)
+    start_col = col - col % (SIZE // 3)
+    for i in range(SIZE // 3):
+        for j in range(SIZE // 3):
+            if board[i + start_row][j + start_col] == num:
+                return False
 
-if solve_sudoku(puzzle):
-    print("Sudoku puzzle solved:")
-    print_board(puzzle)
-else:
-    print("No solution exists for the given Sudoku puzzle.")
+    return True
+
+def display_board(board):
+    for i in range(SIZE):
+        for j in range(SIZE):
+            print(board[i][j], end=" ")
+        print()
+    print()
+
+if __name__ == "__main__":
+    main()
