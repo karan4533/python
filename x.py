@@ -1,1 +1,0 @@
-print("The translated text is:")
