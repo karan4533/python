@@ -1,9 +1,11 @@
 SIZE = 3
 
+#code initializes a 2D list representing 
 def main():
     board = [[0 for _ in range(SIZE)] for _ in range(SIZE)]
     display_possibilities(board, 0, 0)
 
+#checks if the current row index (row) is equal to the predefined size (SIZE) 
 def display_possibilities(board, row, col):
     if row == SIZE:
         display_board(board)
@@ -19,7 +21,7 @@ def display_possibilities(board, row, col):
                 next_col = 0
             display_possibilities(board, next_row, next_col)
             board[row][col] = 0
-
+# checks if placing a number num at position (row, col)  on the Sudoku board violates Sudoku rules by ensuring num isn't already in the same row or column.
 def is_valid(board, row, col, num):
     for i in range(SIZE):
         if board[row][i] == num or board[i][col] == num:
@@ -33,13 +35,13 @@ def is_valid(board, row, col, num):
                 return False
 
     return True
-
+#each cell value separated by a space and each row printed on a new line.
 def display_board(board):
     for i in range(SIZE):
         for j in range(SIZE):
             print(board[i][j], end=" ")
         print()
     print()
-
+#run directly by the Python interpreter as the main program.
 if __name__ == "__main__":
     main()
