@@ -1,29 +1,41 @@
-V = 4
-graph = [[0, 1, 1, 0], [1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 1, 0]]
-
-def is_valid(v, color, c):
-    for i in range(V):
-        if graph[v][i] == 1 and c == color[i]:
+def is_safe(node, color, graph, colors):
+    for neighbor in graph[node]:
+        if colors[neighbor] == color:
             return False
     return True
 
-def m_coloring(colors, color, vertex):
-    if vertex == V:
+def color_graph(node, graph, colors, available_colors):
+    if node == len(graph):
         return True
-    for col in range(1, colors + 1):
-        if is_valid(vertex, color, col):
-            color[vertex] = col
-            if m_coloring(colors, color, vertex + 1):
+    
+    for color in available_colors:
+        if is_safe(node, color, graph, colors):
+            colors[node] = color
+            if color_graph(node+1, graph, colors, available_colors):
                 return True
-            color[vertex] = 0
+            colors[node] = None
+    
     return False
 
-colors = 3
-color = [0] * V
+def map_coloring(graph, available_colors):
+    num_nodes = len(graph)
+    colors = [None] * num_nodes
 
-if not m_coloring(colors, color, 0):
-    print("Solution does not exist.")
-else:
-    print("Assigned Colors are:")
-    for i in range(V):
-        print(color[i], end=" ")
+    if color_graph(0, graph, colors, available_colors):
+        print("The graph can be colored using the following colors:")
+        for node, color in enumerate(colors):
+            print("Node", node, ":", color)
+    else:
+        print("The graph cannot be colored using the provided colors.")
+
+# Example graph represented as a dictionary of lists
+graph = {
+    0: [1, 2, 3],
+    1: [0, 2],
+    2: [0, 1, 3],
+    3: [0, 2]
+}
+
+available_colors = ["Red", "Green", "Blue", "Yellow"]
+
+map_coloring(graph, available_colors)
