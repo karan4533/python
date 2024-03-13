@@ -1,47 +1,48 @@
-SIZE = 3
-
-#code initializes a 2D list representing 
-def main():
-    board = [[0 for _ in range(SIZE)] for _ in range(SIZE)]
-    display_possibilities(board, 0, 0)
-
-#checks if the current row index (row) is equal to the predefined size (SIZE) 
-def display_possibilities(board, row, col):
-    if row == SIZE:
-        display_board(board)
-        return
-
-    for num in range(1, SIZE+1):
-        if is_valid(board, row, col, num):
-            board[row][col] = num
-            next_row = row
-            next_col = col + 1
-            if next_col == SIZE:
-                next_row += 1
-                next_col = 0
-            display_possibilities(board, next_row, next_col)
-            board[row][col] = 0
-# checks if placing a number num at position (row, col)  on the Sudoku board violates Sudoku rules by ensuring num isn't already in the same row or column.
 def is_valid(board, row, col, num):
-    for i in range(SIZE):
+    # Check if num is not already in current row, column, and 3x3 subgrid
+    for i in range(9):
         if board[row][i] == num or board[i][col] == num:
             return False
-
-    start_row = row - row % (SIZE // 3)
-    start_col = col - col % (SIZE // 3)
-    for i in range(SIZE // 3):
-        for j in range(SIZE // 3):
-            if board[i + start_row][j + start_col] == num:
+    start_row = 3 * (row // 3)
+    start_col = 3 * (col // 3)
+    for i in range(3):
+        for j in range(3):
+            if board[start_row + i][start_col + j] == num:
                 return False
-
     return True
-#each cell value separated by a space and each row printed on a new line.
-def display_board(board):
-    for i in range(SIZE):
-        for j in range(SIZE):
-            print(board[i][j], end=" ")
-        print()
-    print()
-#run directly by the Python interpreter as the main program.
-if __name__ == "__main__":
-    main()
+
+def solve_sudoku(board):
+    for i in range(9):
+        for j in range(9):
+            if board[i][j] == 0:
+                for num in range(1, 10):
+                    if is_valid(board, i, j, num):
+                        board[i][j] = num
+                        if solve_sudoku(board):
+                            return True
+                        board[i][j] = 0  # Backtrack
+                return False
+    return True
+
+def print_board(board):
+    for row in board:
+        print(" ".join(map(str, row)))
+
+# Example Sudoku board (0 represents empty cells)
+board = [
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 0, 0, 8, 0, 0, 7, 9]
+]
+
+if solve_sudoku(board):
+    print("Sudoku solved successfully:")
+    print_board(board)
+else:
+    print("No solution exists.")
