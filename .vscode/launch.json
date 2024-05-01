@@ -8,6 +8,20 @@
       "type": "java",
       "name": "mn",
       "request": "launch",
+      "mainClass": "python.mn",
+      "projectName": "python_6774b895"
+    },
+    {
+      "type": "java",
+      "name": "NQueensSolver",
+      "request": "launch",
+      "mainClass": "python.NQueensSolver",
+      "projectName": "python_6774b895"
+    },
+    {
+      "type": "java",
+      "name": "mn",
+      "request": "launch",
       "mainClass": "mn",
       "projectName": "python_6774b895"
     },
