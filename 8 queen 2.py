@@ -1,8 +1,8 @@
 class NQueens:
-    def __init__(self, N):
-        self.N = N
+    def __init__(self):
+        self.N = 8
+        self.min_solution_count = float('inf')
         self.solution_count = 0
-        self.total_moves = 0
 
     def print_solution(self, board):
         self.solution_count += 1
@@ -17,58 +17,46 @@ class NQueens:
         print()
 
     def is_safe(self, board, row, col):
-        # Check if there's a queen in the same row
         for i in range(col):
             if board[row][i] == 1:
                 return False
 
-        # Check upper diagonal on left side
         for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
             if board[i][j] == 1:
                 return False
 
-        # Check lower diagonal on left side
         for i, j in zip(range(row, self.N), range(col, -1, -1)):
             if board[i][j] == 1:
                 return False
 
         return True
 
-    def solve_nq_util(self, board, col, moves):
+    def solve_nq_util(self, board, col):
         if col >= self.N:
             self.print_solution(board)
-            self.total_moves += len(moves)
-            print("Moves for Solution", self.solution_count, ":", len(moves))
-            print()
+            self.min_solution_count = min(self.min_solution_count, self.solution_count)
             return True
 
         res = False
         for i in range(self.N):
             if self.is_safe(board, i, col):
                 board[i][col] = 1
-                moves.append((i, col))
-                res = self.solve_nq_util(board, col + 1, moves) or res
+                res = self.solve_nq_util(board, col + 1) or res
                 board[i][col] = 0
-                moves.pop()
 
         return res
 
     def solve_nq(self):
         board = [[0] * self.N for _ in range(self.N)]
 
-        if not self.solve_nq_util(board, 0, []):
+        if not self.solve_nq_util(board, 0):
             print("Solution does not exist")
             return False
 
+        print("Minimum number of solutions:", self.min_solution_count)
         return True
 
 
-def main():
-    n_queens = NQueens(8)
-    n_queens.solve_nq()
-    print("Total solutions found:", n_queens.solution_count)
-    print("Total moves made:", n_queens.total_moves)
-
-
 if __name__ == "__main__":
-    main()
+    queen = NQueens()
+    queen.solve_nq()
