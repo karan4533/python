@@ -38,6 +38,6 @@ graph = {
     3: [0, 2]
 }
 
-available_colors = ["Red", "Green", "Blue", "Yellow"]
+available_colors = ["Red", "Green", "pink", "Yellow"]
 
 map_coloring(graph, available_colors)

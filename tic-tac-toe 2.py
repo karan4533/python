@@ -1,42 +1,34 @@
-import random
+EMPTY = '-'  # Represents an empty cell
+X = 'X'      # Represents a cell with 'X'
+O = 'O'      # Represents a cell with 'O'
 
-def generate_tic_tac_toe_solutions():
-    solutions = []
+def generate_possibilities(board, row, col):
+    # Check if the entire board has been filled
+    if row == 3:
+        display_board(board)
+        return
 
-    # Possible winning combinations
-    winning_combos = [
-        ["X", "X", "X", "-", "-", "-", "-", "-", "-"],
-        ["-", "-", "-", "X", "X", "X", "-", "-", "-"],
-        ["-", "-", "-", "-", "-", "-", "X", "X", "X"],
-        ["X", "-", "-", "X", "-", "-", "X", "-", "-"],
-        ["-", "X", "-", "-", "X", "-", "-", "X", "-"],
-        ["-", "-", "X", "-", "-", "X", "-", "-", "X"],
-        ["X", "-", "-", "-", "X", "-", "-", "-", "X"],
-        ["-", "-", "X", "-", "X", "-", "X", "-", "-"]
-    ]
+    # Iterate through each symbol: 'X', 'O', and '-'
+    for i in range(3):
+        # Set the current cell to the corresponding symbol
+        board[row][col] = EMPTY if i == 0 else (X if i == 1 else O)
+        
+        # Move to the next cell in the same row
+        if col < 2:
+            generate_possibilities(board, row, col + 1)
+        # Move to the first cell of the next row
+        else:
+            generate_possibilities(board, row + 1, 0)
 
-    # Shuffle the winning combinations to randomize the order
-    random.shuffle(winning_combos)
-
-    # Add the first 15 combinations to the solutions list
-    for i in range(min(15, len(winning_combos))):
-        solutions.append(winning_combos[i])
-
-    return solutions
-
-def print_board(board):
-    print("|---|---|---|")
-    for i in range(0, 9, 3):
-        print("| " + " | ".join(board[i:i+3]) + " |")
-        print("|---|---|---|")
+def display_board(board):
+    # Print the current state of the board
+    for row in board:
+        print(' '.join(row))
+    print("---------")
 
 if __name__ == "__main__":
-    # Generate 15 possible solutions
-    solutions = generate_tic_tac_toe_solutions()
-
-    # Print the solutions
-    print("8 Possible Solutions for Tic Tac Toe:")
-    for i, solution in enumerate(solutions):
-        print("Solution " + str(i + 1) + ":")
-        print_board(solution)
-        print()
+    # Initialize an empty 3x3 board
+    board = [['' for _ in range(3)] for _ in range(3)]
+    
+    # Generate all possible board configurations
+    generate_possibilities(board, 0, 0)
