@@ -20,7 +20,7 @@ def manhattan_distance(puzzle):
 # Function to get possible moves
 def get_moves(puzzle):
     moves = []
-    x, y = find_index(puzzle, 0)
+    x, y = find_index(puzzle, 0) # type: ignore
     if x > 0:
         new_puzzle = [row[:] for row in puzzle]
         new_puzzle[x][y], new_puzzle[x - 1][y] = new_puzzle[x - 1][y], new_puzzle[x][y]
@@ -66,7 +66,7 @@ def solve(puzzle):
             if str(next_state) not in cost_so_far or new_cost < cost_so_far[str(next_state)]:
                 cost_so_far[str(next_state)] = new_cost
                 priority = new_cost + manhattan_distance(next_state)
-                heappush(frontier, (priority, new_cost, next_state))
+                heappush(frontier, (priority, new_cost, next_state)) # type: ignore
                 came_from[str(next_state)] = current
 
     return None
